@@ -10,7 +10,7 @@ def Select_price(name):
                                           password=conf.pasDB)
         if con.is_connected():
                 cursor = con.cursor()
-                query = ("SELECT name, specifica, amount, link_photo from SHOP_POSITION where name='%s'" % (name))
+                query = "SELECT name, specifica, amount, link_photo from SHOP_POSITION where name='%s'" % name
                 cursor.execute(query)
                 result = cursor.fetchall()
         return result
@@ -20,11 +20,44 @@ def Select_price(name):
             con.close()
 
 
+def select_price():
+    try:
+        con = mysql.connector.connect(host='localhost',
+                              database='testDB',
+                              user=conf.userDB,
+                              use_pure = True,
+                              password=conf.pasDB)
+
+        if con.is_connected():
+
+
+            cursor = con.cursor()
+            query = 'SELECT name, file, description, amount FROM category'
+            cursor.execute(query)
+            result = cursor.fetchall()
+            for name, file, description, amount in result:
+                price = {
+                    'name':name,
+                    'file':file,
+                    'description': description,
+                    'amount': amount,
+
+                }
+
+        return price
+    except Error as e:
+        print(e)
+
+    finally:
+        con.close()
+
+
 def Conncet():
     try:
         con = mysql.connector.connect(host='localhost',
                               database='testDB',
                               user=conf.userDB,
+
                               password=conf.pasDB)
 
         if con.is_connected():
